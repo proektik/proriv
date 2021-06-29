@@ -1,0 +1,33 @@
+import telebot
+from telebot import types
+from PIL import Image
+
+token = '1899432896:AAHY9_Pp3MxM5m8j4D_W3pscp5tNebE9c_A'
+bot = telebot.TeleBot(token)
+
+
+@bot.message_handler(commands=["start"])
+def hey(message):
+    bot.send_message(message.chat.id,
+                     "Привет! Какую картиночку обработать, котик?")
+
+
+@bot.message_handler(content_types=['photo'])
+def take_ph(message):
+    file_info = bot.get_file(message.photo[len(message.photo) - 1].file_id)
+    downloaded_file = bot.download_file(file_info.file_path)
+
+    src = 'D:/' + 'photo.jpg'
+    with open(src, 'wb') as new_file:
+        new_file.write(downloaded_file)
+
+    bot.send_message(message.chat.id,
+                     "Пожалуй, я сохраню это")
+
+    # тут написать какое-то условие, чтобы выводилась обработанная фотка
+    # а точнее засунуть сюда результат нейронки
+    bot.send_message(message.chat.id,
+                     "А вот и мой результат :3")
+
+    img = open('тут обработанная фотка.jpg', 'rb')
+    bot.send_photo(message.chat.id, img)
