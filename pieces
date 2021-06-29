@@ -1,0 +1,31 @@
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np
+
+img = cv2.imread("/content/_2016-04-26 13-04-55_1101_r_3C.JPG")
+
+img_RGB=cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+plt.imshow(img_RGB)
+plt.show()
+
+# рассмотрение каждого кусочка изображения
+x = y = 0
+h = w = 128
+for i in range(74):
+  for j in range(113):
+    crop = img_RGB[y:y+h, x:x+w]
+    crop = crop.reshape(-1, 128, 128, 3)
+    s = model(crop)
+    a = s[0][:].numpy()
+    bear = a[0]
+    snow = a[1]
+    if bear > snow:
+      cv2.rectangle(img, (x,y), (x+w,y+h), (0, 255, 255), 20)
+    #plt.imshow(crop)
+    #plt.show()
+    x += 64
+  x = 0
+  y += 64
+  
+plt.imshow(img)
+plt.show()
