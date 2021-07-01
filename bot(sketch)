@@ -31,3 +31,5 @@ def take_ph(message):
 
     img = open('тут обработанная фотка.jpg', 'rb')
     bot.send_photo(message.chat.id, img)
+
+bot.polling()
